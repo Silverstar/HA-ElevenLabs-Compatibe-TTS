@@ -206,6 +206,7 @@ class ElevenLabsTTSProvider(TextToSpeechEntity):
                 # Prepare conversion parameters
                 convert_params = {
                     "text": message,
+                    "output_format": "mp3_44100_128",
                     "voice_id": voice_id,
                     "model_id": model_id,
                     "voice_settings": voice_settings,
