@@ -4,6 +4,7 @@ DOMAIN = "elevenlabs_custom_tts"
 
 # Configuration constants
 CONF_API_KEY = "api_key"
+CONF_BASE_URL = "base_url"
 
 # Service names
 SERVICE_GET_VOICES = "get_voices"
@@ -38,3 +39,4 @@ DEFAULT_STYLE = 0.0
 DEFAULT_SPEED = 1.0
 DEFAULT_USE_SPEAKER_BOOST = True
 DEFAULT_APPLY_TEXT_NORMALIZATION = "auto"
+DEFAULT_BASE_URL = "https://api.elevenlabs.io"

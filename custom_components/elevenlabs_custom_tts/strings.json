@@ -5,7 +5,11 @@
         "title": "ElevenLabs Custom TTS",
         "description": "Configure your ElevenLabs API key",
         "data": {
-          "api_key": "API Key"
+          "api_key": "API Key",
+          "base_url": "Base URL"
+        },
+        "data_description": {
+          "base_url": "Leave as default to use the official ElevenLabs API. Point this at a compatible proxy or self-hosted endpoint otherwise."
         }
       }
     },

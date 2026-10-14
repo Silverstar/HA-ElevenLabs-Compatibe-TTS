@@ -16,6 +16,7 @@ from homeassistant.helpers.httpx_client import get_async_client
 
 from .const import (
     DOMAIN,
+    CONF_BASE_URL,
     DEFAULT_MODEL,
     DEFAULT_STABILITY,
     DEFAULT_SIMILARITY_BOOST,
@@ -23,6 +24,7 @@ from .const import (
     DEFAULT_SPEED,
     DEFAULT_USE_SPEAKER_BOOST,
     DEFAULT_APPLY_TEXT_NORMALIZATION,
+    DEFAULT_BASE_URL,
 )
 
 # Schema field mappings for user-friendly labels
@@ -63,15 +65,18 @@ def _map_profile_to_form_data(profile_name: str, profile_data: dict[str, Any]) -
         APPLY_TEXT_NORMALIZATION_KEY: profile_data.get("apply_text_normalization", DEFAULT_APPLY_TEXT_NORMALIZATION),
     }
 
-USER_STEP_SCHEMA = vol.Schema({vol.Required(CONF_API_KEY): str})
+USER_STEP_SCHEMA = vol.Schema({
+    vol.Required(CONF_API_KEY): str,
+    vol.Optional(CONF_BASE_URL, default=DEFAULT_BASE_URL): str,
+})
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def validate_api_key(hass: HomeAssistant, api_key: str) -> bool:
+async def validate_api_key(hass: HomeAssistant, api_key: str, base_url: str | None = None) -> bool:
     """Validate the API key by testing it with ElevenLabs API."""
     httpx_client = get_async_client(hass)
-    client = AsyncElevenLabs(api_key=api_key, httpx_client=httpx_client)
+    client = AsyncElevenLabs(api_key=api_key, base_url=base_url or None, httpx_client=httpx_client)
     
     def _test_api_key():
         """Test API key synchronously to avoid blocking import_module calls."""
@@ -119,7 +124,7 @@ class ElevenLabsCustomTTSConfigFlow(ConfigFlow, domain=DOMAIN):
             self._abort_if_unique_id_configured()
             
             # Validate API key
-            if await validate_api_key(self.hass, api_key):
+            if await validate_api_key(self.hass, api_key, user_input.get(CONF_BASE_URL)):
                 return self.async_create_entry(
                     title="ElevenLabs Custom TTS",
                     data=user_input,

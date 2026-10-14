@@ -15,6 +15,7 @@ from homeassistant.helpers.httpx_client import get_async_client
 
 from .const import (
     DOMAIN,
+    CONF_BASE_URL,
     SERVICE_GET_VOICES,
     ATTR_VOICE_TYPE,
     ATTR_SEARCH_TEXT,
@@ -29,7 +30,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Store the client in hass.data
     httpx_client = get_async_client(hass)
     client = AsyncElevenLabs(
-        api_key=entry.data[CONF_API_KEY], 
+        api_key=entry.data[CONF_API_KEY],
+        base_url=entry.data.get(CONF_BASE_URL),
         httpx_client=httpx_client
     )
     
